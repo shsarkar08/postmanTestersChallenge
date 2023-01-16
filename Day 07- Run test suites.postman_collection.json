@@ -1,0 +1,309 @@
+{
+	"info": {
+		"_postman_id": "16f88982-ac6f-4cfa-9ecc-dcc67b5ff355",
+		"name": "Day 07: Run test suites",
+		"description": "## Instructions for Day 7: Run test suites\n\n1.  **Get the challenge:** Fork the parent collection to your own public workspace.\n2.  **Read the documentation:** Select the first folder. Expand the context bar on the right to follow the instructions in the collection documentation.\n3.  **Submit your solution:** Select the second folder and follow the instructions in the documentation to validate your solution.\n    \n## Learning objectives\n- Write tests for request, folder, or collection\n- Write dynamic tests using variables\n- Run a collection locally using the collection runner\n- Schedule a collection run on Postman Cloud\n- Schedule a collection-based monitor on Postman Cloud\n\n## Concepts covered\n\n* [Write tests](https://learning.postman.com/docs/writing-scripts/test-scripts/)\n* [Collection Runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/)\n* [Schedule collection runs](https://learning.postman.com/docs/running-collections/scheduling-collection-runs/)\n* [Schedule collection-based monitors](https://learning.postman.com/docs/monitoring-your-api/intro-monitors/#collection-based-monitors)\n\n## Additional resources\n\n* [Trigger runs with webhooks](https://learning.postman.com/docs/running-collections/collection-webhooks/) docs\n*   [Log Response Data in Collection Runs](https://youtu.be/UreV_7fHKiU) video",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16143001"
+	},
+	"item": [
+		{
+			"name": "Run test suites",
+			"item": [
+				{
+					"name": "Variables and scripts Copy",
+					"item": [
+						{
+							"name": "get Canadian user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const resp = pm.response.json()\r",
+											"\r",
+											"let ftitle = resp.results[0].name['title']\r",
+											"let fname = resp.results[0].name['first']\r",
+											"let lname = resp.results[0].name['last']\r",
+											"let name = ftitle + \" \" + fname + \" \" + lname\r",
+											"let email = resp.results[0].email\r",
+											"let uuid = resp.results[0].login['uuid']\r",
+											"console.log(name, email, uuid)\r",
+											"\r",
+											"pm.collectionVariables.set('name', name)\r",
+											"pm.collectionVariables.set('email', email)\r",
+											"pm.collectionVariables.set('uuid', uuid)\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://randomuser.me/api?nat=CA",
+									"protocol": "https",
+									"host": [
+										"randomuser",
+										"me"
+									],
+									"path": [
+										"api"
+									],
+									"query": [
+										{
+											"key": "nat",
+											"value": "CA"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "echo the user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const resp = pm.response.json()\r",
+											"\r",
+											"pm.test(`Returns correct email: ${pm.collectionVariables.get('email')}`, function () {\r",
+											" pm.expect(resp.data).to.contain(pm.collectionVariables.get('email'))\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"name\": {{name}},\r\n\"email\": {{email}},\r\n\"uuid\": {{uuid}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://postman-echo.com/post",
+									"protocol": "https",
+									"host": [
+										"postman-echo",
+										"com"
+									],
+									"path": [
+										"post"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "Let's use the [Random User API](https://randomuser.me/) to pass data from one request to another using variables.\n\n1.  **Add a request**: Add a request called `get Canadian user` to the folder `Variables and scripts` with the following details:\n    *   `GET` method\n    *   `https://randomuser.me/api` request URL\n    *   Query parameter called `nat` with the value `CA`  \n        Send the request to make sure you receive a successful response.\n2.  **Add another request**: Add a second request called `echo the user` after the first one with the following details:\n    *   `POST` method\n    *   `https://postman-echo.com/post` request URL\n    *   JSON request body formatted like this:\n        \n        ``` json\n        {\n        \"name\": \"Dawn Ellis\",\n        \"email\": \"dawn.ellis@example.com\",\n        \"uuid\": \"334eecea-607d-4111-90ee-e57bea971654\"\n        }\n        \n        ```\n        \n3.  **Set variables**: Under the **Tests** tab of the `get Canadian user` request, initialize **collection variables** to store the data returned from the API for the first user in the response object. This information is required for the next request.\n4.  **Get variables**: Under the **Body** tab in the `echo the user` request, use the variables from the previous step. The request body should no longer be hard coded, and instead, should reference the variables you just created. Step through the workflow by running each request one at a time to ensure you are setting and getting the variables properly.\n5.  **Run the folder**: Once you think you have it, run this folder using the [runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/) to make sure there are no errors.\n    \nOnce you complete these steps, move on to the next folder in this collection to submit your solution. Follow the instructions in the request documentation.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"pm.test(\"Status is 200\", ()=> {",
+									"    pm.response.to.have.status(200)",
+									"})"
+								]
+							}
+						}
+					]
+				}
+			],
+			"description": "Let's continue using the [Random User API](https://randomuser.me/) to learn how to run a collection or folder in Postman.\n\n1.  **Add a folder**: Find the completed challenge from `Day 05: Variables and scripts`, and duplicate the folder called `Variables and scripts`. Drag that folder into this folder `Run test suites`.\n1. **Add test to the folder**: Select the new folder `Variables and scripts`, and [add a test](https://learning.postman.com/docs/writing-scripts/test-scripts/#adding-tests) to the folder so that it runs after every request within the folder. This test should ensure a successful HTTP status code. Make sure the test is added to the folder, and not each of the two requests.\n1. **Add a dynamic test**: Add a test to the second request to verify that you have the correct email address. The expectation statement needs to both parse the response data and compare it to your collection variable. Using a variable in the test name provides more visibility for debugging. Feel free to add more tests.\n```javascript\npm.test(`Returns correct email: ${pm.collectionVariables.get('email')}`, function () {\n    //add your expectation here\n})\n```\n1.  **Run the folder**: Now that you have two requests with some tests, run the folder `Run test suites` using [the collection runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/) to make sure your tests pass. Take a minute to review the configuration options, the results, and run summary.\n1. **Schedule a collection run (optional)**: You can schedule a collection to run on Postman cloud. To try it out, fork your collection to a personal, private, or team workspace and [schedule a run](https://learning.postman.com/docs/running-collections/scheduling-collection-runs/) according to a specified frequency. You can return to edit the configuration details or review the results.\n1. **Schedule a monitor (optional)**: You can also [schedule a collection-based monitor](https://learning.postman.com/docs/monitoring-your-api/intro-monitors/#collection-based-monitors) for when you want to set up alerts like triggering on-call upon failure.\n\nIn upcoming challenges, we'll learn other ways to run test suites.\n\nOnce you complete these steps, move on to the next folder in this collection to submit your solution. Follow the instructions in the request documentation."
+		},
+		{
+			"name": "Submit your solution",
+			"item": [
+				{
+					"name": "submit collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// counter for passed tests",
+									"let pass = 0",
+									"let totalToPass = 8",
+									"",
+									"let collection = pm.response.json().collection",
+									"",
+									"pm.test(\"If you have any failures, review the failed test results or ask for support in the community forum. Remember to save your changes if you update the collection. When all of your tests pass, you are done with today's challenge.\", () => {",
+									"    pm.expect(true);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Correct collection returned\", () => {",
+									"    pm.expect(collection.info.name).equals(\"Day 07: Run test suites\")",
+									"    pass += 1",
+									"})",
+									"",
+									"let parentFolder = collection.item.find(fol => {return fol.name === \"Run test suites\"})",
+									"let folder = parentFolder.item.find(fol => {return fol.name === \"Variables and scripts\" || fol.name == \"Variables and scripts Copy\"})",
+									"",
+									"pm.test(\"Requests added correctly\", () => {",
+									"    pm.expect(folder.item.length, 'check number of requests').equals(2)",
+									"",
+									"    let canadianRequest = folder.item.find(req => { return req.name === \"get Canadian user\"})",
+									"    pm.expect(canadianRequest.name, 'check name').equals(\"get Canadian user\")",
+									"    pm.expect(canadianRequest.request.method, 'check method').equals(\"GET\")",
+									"    pm.expect(canadianRequest.request.url.query.length, 'check params').equals(1)",
+									"    pm.expect(canadianRequest.request.url.query[0].key, 'check param key').equals(\"nat\")",
+									"    pm.expect(canadianRequest.request.url.query[0].value, 'check param value').equals(\"CA\")",
+									"",
+									"    let echoRequest = folder.item.find(req => { return req.name === \"echo the user\"})",
+									"    pm.expect(echoRequest.name, 'check name').equals(\"echo the user\")",
+									"    pm.expect(echoRequest.request.method, 'check method').equals(\"POST\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"pm.test(\"Collection variables set\", () => {",
+									"    let canadianRequest = folder.item.find(req => { return req.name === \"get Canadian user\"})",
+									"    let canadianTest = canadianRequest.event.find(event => { return event.listen === \"test\" })",
+									"    pm.expect(canadianTest.listen).equals(\"test\")",
+									"    pm.expect(canadianTest.script.exec.toString(), 'check collection variables set').contains(\"pm.collectionVariables.set\")",
+									"    pm.expect(canadianTest.script.exec.toString(), 'check parsed name').contains(\"name\")",
+									"    pm.expect(canadianTest.script.exec.toString(), 'check parsed email').contains(\"email\")",
+									"    pm.expect(canadianTest.script.exec.toString(), 'check parsed uuid').contains(\"uuid\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"pm.test(\"Echo body added\", () => {",
+									"    let echoRequest = folder.item.find(req => { return req.name === \"echo the user\"})",
+									"",
+									"    pm.expect(echoRequest.request.body.mode, 'check mode').equals(\"raw\")",
+									"    pm.expect(echoRequest.request.body.options.raw.language, 'check language').equals(\"json\")",
+									"    pm.expect(echoRequest.request.body.raw, 'check body not hardcoded').does.not.contain(\"dawn.ellis@example.com\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"pm.test(\"Folder-level test added\", function() {",
+									"    let event = folder.event.find(e => {return e.listen === \"test\"})",
+									"    pm.expect(event.script.exec.toString()).contains('200')",
+									"    pass += 1",
+									"})",
+									"",
+									"pm.test(\"Echo test added\", () => {",
+									"    let echoRequest = folder.item.find(req => { return req.name === \"echo the user\"})",
+									"    let event = echoRequest.event.find(e => {return e.listen === \"test\"})",
+									"",
+									"    pm.expect(event.script.exec.toString(), 'check parse object').contains(\"pm.response.json\")",
+									"    pass += 1",
+									"})",
+									"",
+									"// visualization for test results",
+									"let template",
+									"if (pass == totalToPass) {",
+									"    template = `🍪 passing!",
+									"        <br />",
+									"        <img src=\"https://media0.giphy.com/media/Q343jgPdGDu251pGvI/giphy.gif?cid=ecf05e47wmgub9asxncr6ignkagrk1bcnygb3okl9ieny0wt&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"} else {",
+									"    template = `🙅 please try again",
+									"        <br />",
+									"        <img src=\"https://media1.giphy.com/media/QzSNkvOoLJ6wpA6Uoz/giphy.gif?cid=ecf05e47jshcqa6t00492fd5dl708fh3xcwuxmews3wxsjtr&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"}",
+									"pm.visualizer.set(template)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{postman_api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.getpostman.com/collections/16143001-16f88982-ac6f-4cfa-9ecc-dcc67b5ff355",
+							"protocol": "https",
+							"host": [
+								"api",
+								"getpostman",
+								"com"
+							],
+							"path": [
+								"collections",
+								"16143001-16f88982-ac6f-4cfa-9ecc-dcc67b5ff355"
+							]
+						},
+						"description": "It's time to check your collection.\n\n1.  **Get the collection ID:** Select the collection in the sidebar. Then in the context bar to the right, select the `Info` icon and copy the collection `ID`.\n1.  **Update the request URL:** Update the `collection_uid` in the request URL with the collection `ID` from the previous step, using any method you prefer. ⚠ Remember to add sensitive values like an API key to the `CURRENT VALUE` (and not `INITIAL VALUE`) of your public workspace.\n1.  **Validate your solution**: Hit **Send** and look under the **Tests** tab of the server response at the bottom to review your test results.\n    \nIf you have any failures, review the failed test results or ask for support in the [community forum](https://community.postman.com/c/training/38). When all of your tests pass, you are done with today's challenge."
+					},
+					"response": []
+				}
+			],
+			"description": "Follow the instructions in the request documentation."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "name",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "uuid",
+			"value": ""
+		}
+	]
+}
