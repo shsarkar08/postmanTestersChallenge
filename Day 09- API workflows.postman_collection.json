@@ -1,0 +1,282 @@
+{
+	"info": {
+		"_postman_id": "6909b963-f584-4045-b69b-c2c877586b6e",
+		"name": "Day 09: API workflows",
+		"description": "## Instructions for Day 9: API workflows\n\n1.  **Get the challenge:** Fork the parent collection to your own public workspace.\n2.  **Read the documentation:** Select the first folder. Expand the context bar on the right to follow the instructions in the collection documentation.\n3.  **Submit your solution:** Select the second folder and follow the instructions in the documentation to validate your solution.\n    \n## Learning objectives\n- Update requests dynamically such as for pagination\n- Write code to branch and loop API execution\n- Set variables conditionally to keep track of data\n\n## Concepts covered\n\n*   [Variables](https://learning.postman.com/docs/sending-requests/variables/)\n*   [Scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/)\n*   [Writing tests](https://learning.postman.com/docs/writing-scripts/test-scripts/)\n*   [Building request workflows](https://learning.postman.com/docs/running-collections/building-workflows/)\n*   [Running a collection](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/)\n    \n\n## Additional resources\n\n*   [Example](https://www.postman.com/postman/workspace/postman-answers/collection/9215231-b9133e48-73c3-4aa4-b189-e038ee4c5e00?ctx=documentation) in Postman Answers workspace\n*   [Sending asynchronous requests](https://learning.postman.com/docs/writing-scripts/script-references/postman-sandbox-api-reference/#sending-requests-from-scripts)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16143001"
+	},
+	"item": [
+		{
+			"name": "API workflows",
+			"item": [
+				{
+					"name": "get starships",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const resp = pm.response.json()\r",
+									"console.log(resp.count)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"/* get starships request will be called if the next page is available, so that running this folder in its entirety would page through all the starships in order until there are no more pages available */\r",
+									"\r",
+									"let pageNumber = parseInt(pm.collectionVariables.get('pageNumber'))\r",
+									"\r",
+									"if (resp.next !== null){\r",
+									"    pageNumber +=1\r",
+									"    pm.collectionVariables.set('pageNumber', pageNumber)\r",
+									"    postman.setNextRequest('get starships')\r",
+									"\r",
+									"} else {\r",
+									"    pm.collectionVariables.set('pageNumber', 1)\r",
+									"}\r",
+									"\r",
+									"//loop through starships to get fastest starship name & speed\r",
+									"\r",
+									"let fsname = pm.collectionVariables.get('fastestShip')\r",
+									"let fspeed = pm.collectionVariables.get('fastestSpeed')\r",
+									"\r",
+									"resp.results.forEach(function(ss){\r",
+									"    if(ss.hasOwnProperty('max_atmosphering_speed')){\r",
+									"        if (ss.max_atmosphering_speed > fspeed){\r",
+									"            fspeed = parseInt(ss.max_atmosphering_speed)\r",
+									"            fsname = ss.name\r",
+									"        }\r",
+									"       pm.collectionVariables.set('fastestShip', fsname)\r",
+									"       pm.collectionVariables.set('fastestSpeed', fspeed)\r",
+									"    }\r",
+									"\r",
+									"})\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://swapi.dev/api/starships?page={{pageNumber}}",
+							"protocol": "https",
+							"host": [
+								"swapi",
+								"dev"
+							],
+							"path": [
+								"api",
+								"starships"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{pageNumber}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "echo the starship",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"fastestShip\": \"{{fastestShip}}\",\r\n\"fastestSpeed\": \"{{fastestSpeed}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://postman-echo.com/post",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"post"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Let's use the [The Star Wars API](https://swapi.dev/documentation) in this challenge.\n\n1.  **Add a request**: Add a request called `get starships` to the folder `API workflows` with the following details:\n    *   `GET` method\n    *   `https://swapi.dev/api/starships` request URL \n        **Send** the request. Then add a log statement under the **Tests** tab to output the number of starships returned in the server response, and **Save**.\n1. **Add a query parameter**: Inspect the response. You might already see there are a few ways to walk through subsequent pages of results in Postman using code. In this example, add the query parameter `page` to the `get starships` request. The value of this collection variable should be <code>\\{{pageNumber\\}}</code> initialized with a temporary value of the number `1` in the collection variables editor.\n1. **Add test scripts**: \n  - Add a test to verify a `200` status code\n  - Add a script to get the variable `pageNumber` and increment it by 1, only if the next page is available\n  - Save the variable so the incremented value can be used in the subsequent API call \n\n  **Send** the call to make sure you are getting and setting the `pageNumber` variable as expected. Remember you can use the console for more visibility if your code isn't behaving as expected.\n  - Add another script to set the next request called to be the `get starships` request if the next page is available, so that running this folder in its entirety would page through all the starships in order until there are no more pages available.\n1. **Add another test script**: Still under the **Tests** tab of the `get starships` request, add code to loop through the starships and determine which starship is the fastest.\n  - Initialize two collection variables called `fastestShip` and `fastestSpeed`. The INITIAL values can be your first name and `0`.\n  - You must [cast a string to a number](https://www.w3schools.com/js/js_type_conversion.asp) to compare numerical values, like speed.\n  - Keep track of the fastest starship's `name` and `max_atmosphering_speed` as collection variables, to use in the next step.\n2.  **Add another request**: Add a second request called `echo the starship` after the first one with the following details:\n    *   `POST` method\n    *   `https://postman-echo.com/post` request URL\n    *   JSON request body formatted like this:\n```\n{\n    \"fastestShip\": \"{{fastestShip}}\",\n    \"fastestSpeed\": \"{{fastestSpeed}}\"\n}\n```\n Note: if you define and reference variables, Postman handles string substitution in the documentation. So double check you have formatted the JSON request body properly.\n4.  **Run the folder**: Once you think you have it, run this folder using the [runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/) to make sure there are no errors.\n    \n\nOnce you complete these steps, move on to the next folder in this collection to submit your solution. Follow the instructions in the request documentation."
+		},
+		{
+			"name": "Submit your solution",
+			"item": [
+				{
+					"name": "submit collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// counter for passed tests",
+									"let pass = 0",
+									"let totalToPass = 7",
+									"",
+									"let collection = pm.response.json().collection",
+									"",
+									"pm.test(\"If you have any failures, review the failed test results or ask for support in the community forum. Remember to save your changes if you update the collection. When all of your tests pass, you are done with today's challenge.\", () => {",
+									"    pm.expect(true);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Correct collection returned\", () => {",
+									"    pm.expect(collection.info.name).equals(\"Day 09: API workflows\")",
+									"    pass += 1",
+									"})",
+									"",
+									"let folder = collection.item.find(fol => {return fol.name === \"API workflows\"})",
+									"",
+									"pm.test(\"Requests added correctly\", () => {",
+									"    pm.expect(folder.item.length, 'check number of requests').equals(2)",
+									"",
+									"    let starRequest = folder.item.find(req => { return req.name === \"get starships\"})",
+									"    pm.expect(starRequest.name, 'check name').equals(\"get starships\")",
+									"    pm.expect(starRequest.request.method, 'check method').equals(\"GET\")",
+									"    pm.expect(starRequest.request.url.query.length, 'check params').equals(1)",
+									"",
+									"    let echoRequest = folder.item.find(req => { return req.name === \"echo the starship\"})",
+									"    pm.expect(echoRequest.name, 'check name').equals(\"echo the starship\")",
+									"    pm.expect(echoRequest.request.method, 'check method').equals(\"POST\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"pm.test(\"Collection variables set\", () => {",
+									"",
+									"    pm.expect(collection.variable.length).equals(3)",
+									"    pm.expect(collection.variable.map(a => a.key), 'check collection variables set').to.contain.oneOf([\"pageNumber\",\"fastestShip\",\"fastestSpeed\"])",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"pm.test(\"Echo body added\", () => {",
+									"    let echoRequest = folder.item.find(req => { return req.name === \"echo the starship\"})",
+									"",
+									"    pm.expect(echoRequest.request.body.mode, 'check mode').equals(\"raw\")",
+									"    pm.expect(echoRequest.request.body.options.raw.language, 'check language').equals(\"json\")",
+									"    pm.expect(echoRequest.request.body.raw.toString(), 'check ship').contains(\"fastestShip\")",
+									"    pm.expect(echoRequest.request.body.raw.toString(), 'check speed').contains(\"fastestSpeed\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"pm.test(\"Starships test added\", () => {",
+									"    let starRequest = folder.item.find(req => { return req.name === \"get starships\"})",
+									"    let event = starRequest.event.find(e => {return e.listen === \"test\"})",
+									"",
+									"    pm.expect(event.script.exec.toString(), 'check parse object').contains(\"pm.response.json\")",
+									"",
+									"    pm.expect(event.script.exec.toString(), 'check log').contains(\"console.log\")",
+									"    pass += 1",
+									"})",
+									"",
+									"// visualization for test results",
+									"let template",
+									"if (pass == totalToPass) {",
+									"    template = `🍪 passing!",
+									"        <br />",
+									"        <img src=\"https://media0.giphy.com/media/l2JhtCMwgCLcRXmgg/giphy.gif?cid=ecf05e47lg5h7qayt9xr5skf06lh31kz2ozhysrypm4htinx&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"} else {",
+									"    template = `🙅 please try again",
+									"        <br />",
+									"        <img src=\"https://media3.giphy.com/media/UohTsyhfrsPFm/giphy.gif?cid=ecf05e47mv96rgygl6w4fenzomwqqeh17p5pvcsgenuyxsbo&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"}",
+									"pm.visualizer.set(template)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{postman_api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.getpostman.com/collections/16143001-6909b963-f584-4045-b69b-c2c877586b6e",
+							"protocol": "https",
+							"host": [
+								"api",
+								"getpostman",
+								"com"
+							],
+							"path": [
+								"collections",
+								"16143001-6909b963-f584-4045-b69b-c2c877586b6e"
+							]
+						},
+						"description": "It's time to check your collection.\n\n1.  **Get the collection ID:** Select the collection in the sidebar. Then in the context bar to the right, select the `Info` icon and copy the collection `ID`.\n1.  **Update the request URL:** Update the `collection_uid` in the request URL with the collection `ID` from the previous step, using any method you prefer. ⚠ Remember to add sensitive values like an API key to the `CURRENT VALUE` (and not `INITIAL VALUE`) of your public workspace.\n1.  **Validate your solution**: Hit **Send** and look under the **Tests** tab of the server response at the bottom to review your test results.\n    \nIf you have any failures, review the failed test results or ask for support in the [community forum](https://community.postman.com/). When all of your tests pass, you are done with today's challenge."
+					},
+					"response": []
+				}
+			],
+			"description": "Follow the instructions in the request documentation."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "pageNumber",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "fastestShip",
+			"value": "Shah",
+			"type": "string"
+		},
+		{
+			"key": "fastestSpeed",
+			"value": "0",
+			"type": "string"
+		}
+	]
+}
