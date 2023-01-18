@@ -1,0 +1,249 @@
+{
+	"info": {
+		"_postman_id": "a6270490-fc7b-4c4a-8377-4428a933b287",
+		"name": "Day 10: Test coverage",
+		"description": "## Instructions for Day 10: Test coverage\n\n1.  **Get the challenge:** Fork the parent collection to your own public workspace.\n2.  **Read the documentation:** Select the first folder. Expand the context bar on the right to follow the instructions in the collection documentation.\n3.  **Submit your solution:** Select the second folder and follow the instructions in the documentation to validate your solution.\n    \n## Learning objectives\n- Use external data files to pass Postman values\n- Generate sample data dynamically\n- Increase test scenarios\n\n## Concepts covered\n* [Using dynamic variables](https://learning.postman.com/docs/writing-scripts/script-references/variables-list/)\n*   [Working with data files](https://learning.postman.com/docs/running-collections/working-with-data-files/)\n*   [Running a collection](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/)\n    \n\n## Additional resources\n\n*   [Looping through a data file with the Postman collection runner](https://blog.postman.com/looping-through-a-data-file-in-the-postman-collection-runner/) blog\n*   [Loop through a data file](https://youtu.be/RH8b3gbujPY) video\n* [How to break an API](https://youtu.be/c-5UMf6sWk4) stream\n* [Unbreakable API](https://www.postman.com/postman/workspace/unbreakable-api/overview) code samples\n* [Big List of Naughty Strings](https://github.com/minimaxir/big-list-of-naughty-strings)\n* [Fuzz testing with Big List of Naughty Strings](https://youtu.be/q7rkPG0f6Gc) video\n* [Negative testing for more resilient APIs](https://medium.com/better-practices/negative-testing-for-more-resilient-apis-af904a74d32b) blog",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16143001"
+	},
+	"item": [
+		{
+			"name": "Test coverage",
+			"item": [
+				{
+					"name": "httpbin with faker",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(pm.variables.replaceIn('{{$randomColor}}'))\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"name\": \"Shahnawaz\",\r\n\"test\": \"Postman testers challenge\",\r\n\"animalImage\":\"{{$randomAnimalsImage}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "httpbin.org/anything?testData={{$randomCatchPhrase}}",
+							"host": [
+								"httpbin",
+								"org"
+							],
+							"path": [
+								"anything"
+							],
+							"query": [
+								{
+									"key": "testData",
+									"value": "{{$randomCatchPhrase}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "httpbin with file",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const resp = pm.response.json()\r",
+									"\r",
+									"pm.test(\"Response has data value\",()=>{\r",
+									"    pm.expect(resp.args.testData).to.eql(pm.iterationData.get('value'))\r",
+									"    \r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "httpbin.org/{{path}}?testData={{value}}",
+							"host": [
+								"httpbin",
+								"org"
+							],
+							"path": [
+								"{{path}}"
+							],
+							"query": [
+								{
+									"key": "testData",
+									"value": "{{value}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Let's use the [HTTPbin API](https://httpbin.org/) in this challenge.\n\n1.  **Add a request**: Add a request called `httpbin with faker` to the folder `Test coverage` with the following details:\n    *   `POST` method\n    *   `httpbin.org/anything` request URL \n  This endpoint works similarly to Postman Echo and returns anything that is passed in the request. Add request body, **Send** the request, and inspect the response. Then add a test to ensure a successful response, and **Save**.\n1. **Add test data**: Let's explore some ways to generate sample data using [the faker library in Postman](https://learning.postman.com/docs/writing-scripts/script-references/variables-list/).\n  - Under the **Params** tab add a parameter called `testData` with the value `$randomCatchPhrase` surrounded in double curly braces the way we reference variables in the text sections of Postman.\n  - Under the **Body** tab, add an image of a random animal using the faker library to generate a new image every time you send the request.\n  - Under the **Tests** tab, use the faker library to log a random color to the console. The syntax is different in pre-request and test scripts, since you are writing JavaScript.\n  - Under the **Tests** tab, add a second test to ensure a successful response.\n1. **Create data file**: In the next steps, we [use a data file](https://learning.postman.com/docs/running-collections/working-with-data-files/) to pass Postman sets of values to use in a collection run. Save [this data](https://assets.postman.com/postman-docs/58702589.json) as a local file. \n1.  **Add a second request**: Add a request called `httpbin with file` to the folder `Test coverage` with the following details:\n    *   `POST` method\n    *   `httpbin.org/{{path}}` request URL\n  Notice we are referencing a variable that is still undefined in the request URL.\n  Once again, let's add some test data.\n  - Under the **Params** tab add a parameter called `testData` with the value `{{value}}` to reference the property `value` in the data file. This variable is also still undefined.\n  - Under the **Tests** tab, add a test called `Response has data value` to ensure the data returned from the server is the same as the test data submitted in the request.\n4.  **Run the folder**: Once you think you have it, run this folder using the [runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/) along with your local [data file](https://learning.postman.com/docs/running-collections/working-with-data-files/) to make sure there are no errors.\n    \n\nOnce you complete these steps, move on to the next folder in this collection to submit your solution. Follow the instructions in the request documentation."
+		},
+		{
+			"name": "Submit your solution",
+			"item": [
+				{
+					"name": "submit collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// counter for passed tests",
+									"let pass = 0",
+									"let totalToPass = 6",
+									"",
+									"let collection = pm.response.json().collection",
+									"",
+									"pm.test(\"If you have any failures, review the failed test results or ask for support in the community forum. Remember to save your changes if you update the collection. When all of your tests pass, you are done with today's challenge.\", () => {",
+									"    pm.expect(true);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Correct collection returned\", () => {",
+									"    pm.expect(collection.info.name).equals(\"Day 10: Test coverage\")",
+									"    pass += 1",
+									"})",
+									"",
+									"let folder = collection.item.find(fol => {return fol.name === \"Test coverage\"})",
+									"",
+									"pm.test(\"Requests added correctly\", () => {",
+									"    pm.expect(folder.item.length, 'check number of requests').equals(2)",
+									"",
+									"    let fakerRequest = folder.item.find(req => { return req.name === \"httpbin with faker\"})",
+									"    pm.expect(fakerRequest.name, 'check name').equals(\"httpbin with faker\")",
+									"    pm.expect(fakerRequest.request.method, 'check method').equals(\"POST\")",
+									"    pm.expect(fakerRequest.request.url.query.length, 'check params').equals(1)",
+									"",
+									"    let fileRequest = folder.item.find(req => { return req.name === \"httpbin with file\"})",
+									"    pm.expect(fileRequest.name, 'check name').equals(\"httpbin with file\")",
+									"    pm.expect(fileRequest.request.method, 'check method').equals(\"POST\")",
+									"    pm.expect(fileRequest.request.url.query.length, 'check params').equals(1)",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"",
+									"pm.test(\"Faker data added\", () => {",
+									"    let fakerRequest = folder.item.find(req => { return req.name === \"httpbin with faker\"})",
+									"    let event = fakerRequest.event.find(e => {return e.listen === \"test\"})",
+									"",
+									"    pm.expect(JSON.stringify(fakerRequest.request), 'check body').to.contain(\"{{$randomAnimalsImage}}\")",
+									"",
+									"    pm.expect(event.script.exec.toString(), 'check log').contains(\"console.log\")",
+									"    pm.expect(event.script.exec.toString(), 'check script').contains(\"pm.variables.replaceIn\")",
+									"    pm.expect(event.script.exec.toString(), 'check faker').contains(\"{{$randomColor}}\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"pm.test(\"File data added\", () => {",
+									"    let fileRequest = folder.item.find(req => { return req.name === \"httpbin with file\"})",
+									"    let event = fileRequest.event.find(e => {return e.listen === \"test\"})",
+									"",
+									"    pm.expect(event.script.exec.toString(), 'check test').contains(\"pm.test\")",
+									"    pm.expect(event.script.exec.toString(), 'check test').contains(\"Response has data value\")",
+									"    pm.expect(event.script.exec.toString(), 'check test').contains(\"pm.response.json()\")",
+									"    pm.expect(event.script.exec.toString(), 'check test').contains(\"testData\")",
+									"    pm.expect(event.script.exec.toString(), 'check test').contains(\"pm.iterationData.get\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"// visualization for test results",
+									"let template",
+									"if (pass == totalToPass) {",
+									"    template = `🍪 passing!",
+									"        <br />",
+									"        <img src=\"https://media1.giphy.com/media/H0UrNLbikeCYg/giphy.gif?cid=ecf05e47lg5h7qayt9xr5skf06lh31kz2ozhysrypm4htinx&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"} else {",
+									"    template = `🙅 please try again",
+									"        <br />",
+									"        <img src=\"https://media3.giphy.com/media/zu8DrkFiuz8JO/giphy.gif?cid=ecf05e47vtwsiob8kittbfq9lkkey2d8sxpafphia58eoanq&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"}",
+									"pm.visualizer.set(template)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{postman_api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.getpostman.com/collections/16143001-a6270490-fc7b-4c4a-8377-4428a933b287",
+							"protocol": "https",
+							"host": [
+								"api",
+								"getpostman",
+								"com"
+							],
+							"path": [
+								"collections",
+								"16143001-a6270490-fc7b-4c4a-8377-4428a933b287"
+							]
+						},
+						"description": "It's time to check your collection.\n\n1.  **Get the collection ID:** Select the collection in the sidebar. Then in the context bar to the right, select the `Info` icon and copy the collection `ID`.\n1.  **Update the request URL:** Update the `collection_uid` in the request URL with the collection `ID` from the previous step, using any method you prefer. ⚠ Remember to add sensitive values like an API key to the `CURRENT VALUE` (and not `INITIAL VALUE`) of your public workspace.\n1.  **Validate your solution**: Hit **Send** and look under the **Tests** tab of the server response at the bottom to review your test results.\n    \nIf you have any failures, review the failed test results or ask for support in the [community forum](https://community.postman.com/). When all of your tests pass, you are done with today's challenge."
+					},
+					"response": []
+				}
+			],
+			"description": "Follow the instructions in the request documentation."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
