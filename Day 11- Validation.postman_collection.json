@@ -1,0 +1,221 @@
+{
+	"info": {
+		"_postman_id": "3e9575f2-db49-4e73-b01e-c4e919ccdd42",
+		"name": "Day 11: Validation",
+		"description": "## Instructions for Day 11: Validation\n\n1.  **Get the challenge:** Fork the parent collection to your own public workspace.\n2.  **Read the documentation:** Select the first folder. Expand the context bar on the right to follow the instructions in the collection documentation.\n3.  **Submit your solution:** Select the second folder and follow the instructions in the documentation to validate your solution.\n  \n## Learning objectives\n- Validate responses against a defined schema\n- Explain the importance of schema validation\n- Write a conditional test to validate various responses\n- Write a negative test to validate an unsuccessful response  \n\n## Concepts covered\n* [Writing tests](https://learning.postman.com/docs/writing-scripts/test-scripts/)\n* [Validating responses](https://learning.postman.com/docs/writing-scripts/test-scripts/#validating-responses)\n\n## Additional resources\n\n* [ajv](https://learning.postman.com/docs/sending-requests/grpc/postman-sandbox-api/#using-external-libraries) and other built-in libraries\n*   [Validate using ajv](https://www.postman.com/postman/workspace/postman-answers/request/9215231-333ddae8-eb72-496d-9e45-6b49a87c7d09) code sample\n* Validate data formats using [JSON schema](https://json-schema.org/) \n*   [Validate API definitions](https://learning.postman.com/docs/designing-and-developing-your-api/developing-an-api/validating-elements-against-schema/) docs\n* [Security warnings during API definition](https://blog.postman.com/security-warnings-during-api-validation/) blog",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16143001"
+	},
+	"item": [
+		{
+			"name": "Validation",
+			"item": [
+				{
+					"name": "pokemon berry",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									" 'type': 'object',\r",
+									" 'properties': {\r",
+									"     'firmness': {\r",
+									"         type: 'object'\r",
+									"     },\r",
+									"     'name': {\r",
+									"         type: 'string'\r",
+									"     },\r",
+									"     'growth_time': {\r",
+									"         type: 'number'\r",
+									"     },\r",
+									"     'size': {\r",
+									"         type: 'number'\r",
+									"     }\r",
+									" },\r",
+									" required: ['flavors', 'size', 'id']\r",
+									"};\r",
+									"if (pm.response.code === 200){\r",
+									"    pm.test('Schema is valid', () => {\r",
+									"        const response = pm.response.json();\r",
+									"        pm.expect(response).to.have.jsonSchema(schema);\r",
+									"})\r",
+									"}\r",
+									"\r",
+									"const errorSchema = {\r",
+									"    'properties': {\r",
+									"        'message': {\r",
+									"            'type': 'string'\r",
+									"        }\r",
+									"    }\r",
+									"};\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test('Error response is valid', () => {\r",
+									"        pm.expect(pm.response.text()).to.have.jsonSchema(errorSchema);\r",
+									"    })\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://pokeapi.co/api/v2/berry/:berryId",
+							"protocol": "https",
+							"host": [
+								"pokeapi",
+								"co"
+							],
+							"path": [
+								"api",
+								"v2",
+								"berry",
+								":berryId"
+							],
+							"variable": [
+								{
+									"key": "berryId",
+									"value": "65"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Let's use the [Pokemon API](https://pokeapi.co/docs/v2#berries-section) in this challenge.\n\n1.  **Add a request**: Add a request called `pokemon berry` to the folder `Validation` with the following details:\n    *   `GET` method\n    *   `https://pokeapi.co/api/v2/berry` request URL \n\n  **Send** the request, and inspect the response. Update the request URL to include the berry id you want to explore, and **Save** your changes.\n1. **Define the schema**: Under the **Tests** tab, create an object to represent the schema we expect the berry data to match:\n```javascript\nconst schema = {\n    'type': 'object',\n    'properties': {\n        'firmness': {\n            type: 'object'\n        },\n        'name': {\n            type: 'string'\n        },\n        'growth_time': {\n            type: 'number'\n        },\n        'size': {\n            type: 'number'\n        }\n    },\n    required: ['flavors', 'size', 'id']\n};\n```\n1. **Validate response against schema**: Add the following test to check the response against the schema.\n```javascript\npm.test('Schema is valid', () => {\n        const response = pm.response.json();\n        pm.expect(response).to.have.jsonSchema(schema);\n})\n```\n  **Send** the request, and verify the test results. Remember to also make sure it fails (e.g. temporarily change one of the schema `type` values an **Send** again).  \n1. **Test unsuccessful responses**: Update the request URL to include a berry id for which there is no berry. **Send** the request and inspect the response. \n\n  Under the **Tests** tab, create an object to represent the schema we expect an error response to match.\n\n```javascript\nconst errorSchema = {\n    'properties': {\n        'message': {\n            'type': 'string'\n        }\n    }\n};\nif (pm.response.code === 404) {\n    pm.test('Error response is valid', () => {\n        pm.expect(pm.response.text()).to.have.jsonSchema(errorSchema);\n    })\n}\n```\n\n  Add a conditional statement before the test on the successful schema.\n```javascript\n  if (pm.response.code === 200)\n```\n\nThere are a number of methods to validate responses. Check out the **Additional resources** section to explore validation against an API definition, using JSON Schema, and using AJV and other built-in libraries.\n\nWrapping a test in an `if` statement is one way to run conditional tests. We will learn other ways in an upcoming challenge.\n\nOnce you complete these steps, move on to the next folder in this collection to submit your solution. Follow the instructions in the request documentation."
+		},
+		{
+			"name": "Submit your solution",
+			"item": [
+				{
+					"name": "submit collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// counter for passed tests",
+									"let pass = 0",
+									"let totalToPass = 5",
+									"",
+									"let collection = pm.response.json().collection",
+									"",
+									"pm.test(\"If you have any failures, review the failed test results or ask for support in the community forum. Remember to save your changes if you update the collection. When all of your tests pass, you are done with today's challenge.\", () => {",
+									"    pm.expect(true);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Correct collection returned\", () => {",
+									"    pm.expect(collection.info.name).equals(\"Day 11: Validation\")",
+									"    pass += 1",
+									"})",
+									"",
+									"let folder = collection.item.find(fol => {return fol.name === \"Validation\"})",
+									"",
+									"pm.test(\"Requests added correctly\", () => {",
+									"    pm.expect(folder.item.length, 'check number of requests').equals(1)",
+									"",
+									"    let berryRequest = folder.item.find(req => { return req.name === \"pokemon berry\"})",
+									"    pm.expect(berryRequest.name, 'check name').equals(\"pokemon berry\")",
+									"    pm.expect(berryRequest.request.method, 'check method').equals(\"GET\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"",
+									"pm.test(\"Validation data added\", () => {",
+									"    let berryRequest = folder.item.find(req => { return req.name === \"pokemon berry\"})",
+									"    let event = berryRequest.event.find(e => {return e.listen === \"test\"})",
+									"",
+									"    let script = event.script.exec.toString()",
+									"    pm.expect(script, 'check parse').contains(\"pm.response.json\")",
+									"    pm.expect(script, 'check successful').contains(\"200\")",
+									"    pm.expect(script, 'check unsuccessful').contains(\"404\")",
+									"    pm.expect(script, 'check test').contains(\"pm.test\")",
+									"    pm.expect(script, 'check schema').contains(\"jsonSchema\")",
+									"",
+									"",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"// visualization for test results",
+									"let template",
+									"if (pass == totalToPass) {",
+									"    template = `🍪 passing!",
+									"        <br />",
+									"        <img src=\"https://media4.giphy.com/media/UuebWyG4pts3rboawU/giphy.gif?cid=ecf05e47mgrdpij2xqhmiefstri039d0d0kl7erpduqjgbea&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"} else {",
+									"    template = `🙅 please try again",
+									"        <br />",
+									"        <img src=\"https://media3.giphy.com/media/3o6ZtnXjuLuNjQpq9i/giphy.gif?cid=ecf05e47nwuwbrkik0my42ek9yfxncw239cwwvdg4scr2pvz&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"}",
+									"pm.visualizer.set(template)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{postman_api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.getpostman.com/collections/16143001-3e9575f2-db49-4e73-b01e-c4e919ccdd42",
+							"protocol": "https",
+							"host": [
+								"api",
+								"getpostman",
+								"com"
+							],
+							"path": [
+								"collections",
+								"16143001-3e9575f2-db49-4e73-b01e-c4e919ccdd42"
+							]
+						},
+						"description": "It's time to check your collection.\n\n1.  **Get the collection ID:** Select the collection in the sidebar. Then in the context bar to the right, select the `Info` icon and copy the collection `ID`.\n1.  **Update the request URL:** Update the `collection_uid` in the request URL with the collection `ID` from the previous step, using any method you prefer. ⚠ Remember to add sensitive values like an API key to the `CURRENT VALUE` (and not `INITIAL VALUE`) of your public workspace.\n1.  **Validate your solution**: Hit **Send** and look under the **Tests** tab of the server response at the bottom to review your test results.\n    \nIf you have any failures, review the failed test results or ask for support in the [community forum](https://community.postman.com/). When all of your tests pass, you are done with today's challenge."
+					},
+					"response": []
+				}
+			],
+			"description": "Follow the instructions in the request documentation."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
