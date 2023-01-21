@@ -1,0 +1,310 @@
+{
+	"info": {
+		"_postman_id": "6a646686-c1ed-4351-98da-1a48f2f334b7",
+		"name": "Day 13: Mock servers",
+		"description": "## Instructions for Day 13: Mock servers\n\n1.  **Get the challenge:** Fork the parent collection to your own public workspace.\n2.  **Read the documentation:** Select the first folder. Expand the context bar on the right to follow the instructions in the collection documentation.\n3.  **Submit your solution:** Select the second folder and follow the instructions in the documentation to validate your solution.\n  \n## Learning objectives\n- Use mock servers to prototype scenarios\n- Explain consumer-driven contract testing using mocks\n- Establish a process for snapshot testing using mocks\n- Generate boilerplate code to replicate API calls  \n\n## Concepts covered\n*   [Set up mock servers](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/)\n* [Generate code snippets](https://learning.postman.com/docs/sending-requests/generate-code-snippets/)\n    \n\n## Additional resources\n*   [Fake it till you make it: mocks for agile development](https://medium.com/better-practices/https-medium-com-postman-engineering-fake-it-till-you-make-it-mocks-for-agile-development-f4d050cad694) blog\n*   [Mock Servers](https://youtu.be/n_7UUghLpco) Exploratory video\n* [Consumer-driven contract testing](https://medium.com/better-practices/consumer-driven-contract-testing-using-postman-f3580dba5370) blog\n* [Snapshot testing for APIs using Postman](https://medium.com/better-practices/snapshot-testing-for-apis-using-postman-7f9f26295d6b) blog",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16143001"
+	},
+	"item": [
+		{
+			"name": "Mock servers",
+			"item": [
+				{
+					"name": "dad jokes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://icanhazdadjoke.com/",
+							"protocol": "https",
+							"host": [
+								"icanhazdadjoke",
+								"com"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "dad jokes",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://icanhazdadjoke.com/",
+									"protocol": "https",
+									"host": [
+										"icanhazdadjoke",
+										"com"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 21 Jan 2023 11:32:55 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "access-control-allow-headers",
+									"value": "User-Agent, Content-Type"
+								},
+								{
+									"key": "access-control-allow-methods",
+									"value": "GET"
+								},
+								{
+									"key": "access-control-allow-origin",
+									"value": "*"
+								},
+								{
+									"key": "access-control-max-age",
+									"value": "86400"
+								},
+								{
+									"key": "access-control-request-method",
+									"value": "GET"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "max-age=0, must-revalidate, no-cache, no-store, public, s-maxage=0"
+								},
+								{
+									"key": "retry-after",
+									"value": "36"
+								},
+								{
+									"key": "x-frame-options",
+									"value": "DENY"
+								},
+								{
+									"key": "x-ratelimit-limit",
+									"value": "100"
+								},
+								{
+									"key": "x-ratelimit-remaining",
+									"value": "98"
+								},
+								{
+									"key": "x-ratelimit-reset",
+									"value": "1674300812"
+								},
+								{
+									"key": "x-xss-protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=6YNViQhoxnmzsaGcQLuAVIrsvRwGRJGI41GVm8tDkI7CquXBHGObBYmL43oIV73WranavFod0qv93IuxKv7CLBHUgvXFlHewhCgH9ty93UbdQAmzOXeUNhUBGdwm4DejlHSwECg%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=15552000; includeSubDomains"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "78cfbb679a2083f3-BLR"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "br"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <meta charset=\"utf-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1\">\n        <meta name=\"description\" content=\"The largest collection of dad jokes on the internet\" />\n        <meta name=\"author\" content=\"C653 Labs\" />\n        <meta name=\"keywords\" content=\"dad,joke,funny,slack,alexa\" />\n        <meta property=\"og:site_name\" content=\"icanhazdadjoke\" />\n        <meta property=\"og:title\" content=\"icanhazdadjoke\" />\n        <meta property=\"og:type\" content=\"website\" />\n        <meta property=\"og:url\" content=\"https://icanhazdadjoke.com/j/aMmbaFYTKBd\" />\n        <meta property=\"og:description\" content=\"I finally bought the limited edition Thesaurus that I've always wanted. When I opened it, all the pages were blank.\r\nI have no words to describe how angry I am.\" />\n        <meta property=\"og:image:url\" content=\"https://icanhazdadjoke.com/j/aMmbaFYTKBd.png\" />\n        <meta property=\"og:image:secure_url\" content=\"https://icanhazdadjoke.com/j/aMmbaFYTKBd.png\" />\n        <meta property=\"og:image:secure_url\" content=\"https://icanhazdadjoke.com/static/smile.png\" />\n        <meta property=\"og:image:type\" content=\"image/png\" />\n        <meta name=\"twitter:card\" content=\"summary\">\n        <meta name=\"twitter:site\" content=\"@icanhazdadjoke\">\n        <meta name=\"twitter:title\" content=\"icanhzdadjoke\">\n        <meta name=\"twitter:description\" content=\"I finally bought the limited edition Thesaurus that I've always wanted. When I opened it, all the pages were blank.\r\nI have no words to describe how angry I am.\">\n        <meta name=\"twitter:image\" content=\"https://icanhazdadjoke.com/static/smile.png\">\n        <meta name=\"twitter:url\" content=\"https://icanhazdadjoke.com/j/aMmbaFYTKBd\" />\n        <link rel=\"canonical\" href=\"https://icanhazdadjoke.com/j/aMmbaFYTKBd\">\n        <link rel=\"amphtml\" href=\"https://icanhazdadjoke.com/j/aMmbaFYTKBd/amp\">\n        <title>icanhazdadjoke</title>\n        <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/static/apple-touch-icon.png\">\n        <link rel=\"icon\" type=\"image/png\" href=\"/static/favicon-32x32.png\" sizes=\"32x32\">\n        <link rel=\"icon\" type=\"image/png\" href=\"/static/favicon-16x16.png\" sizes=\"16x16\">\n        <link rel=\"manifest\" href=\"/static/manifest.json\">\n        <link rel=\"mask-icon\" href=\"/static/safari-pinned-tab.svg\" color=\"#1fc8db\">\n        <link rel=\"shortcut icon\" href=\"/static/favicon.ico\">\n        <meta name=\"msapplication-config\" content=\"/static/browserconfig.xml\">\n        <meta name=\"theme-color\" content=\"#ffffff\">\n        <meta name=\"slack-app-id\" content=\"A214NCJF2\">\n        <link rel=\"stylesheet\" href=\"/static/dist/style.css?55f4ea12\">\n        <script type=\"application/ld+json\">\n      {\n        \"@context\": \"http://schema.org\",\n        \"@type\": \"WebSite\",\n        \"url\": \"https://icanhazdadjoke.com/\",\n        \"name\": \"icanhazdadjoke\",\n        \"description\": \"The largest collection of dad jokes on the internet\",\n        \"potentialAction\": {\n          \"@type\": \"SearchAction\",\n          \"target\": \"https://icanhazdadjoke.com/search?term={search_term_string}\",\n          \"query-input\": \"required name=search_term_string\"\n        }\n      }\n    </script>\n        <script type=\"application/ld+json\">\n      {\n        \"@context\": \"http://schema.org\",\n        \"@type\": \"Organization\",\n        \"url\": \"https://icanhazdadjoke.com/\",\n        \"logo\": \"https://icanhazdadjoke.com/static/smile.png\",\n        \"name\": \"icanhazdadjoke\",\n        \"description\": \"The largest collection of dad jokes on the internet\",\n        \"email\": \"support@icanhazdadjoke.com\"\n      }\n    </script>\n        <script async src=\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\"></script>\n        <script>\n      (adsbygoogle = window.adsbygoogle || []).push({google_ad_client: \"ca-pub-3200991035275362\", enable_page_level_ads: true});\n    </script>\n    </head>\n    <body>\n        <nav class=\"nav has-shadow\">\n            <div class=\"container\">\n                <div class=\"nav-left\">\n                    <a class=\"nav-item is-brand\" href=\"/\">\n                        <img src=\"/static/smile.svg\" alt=\"icanhazdadjoke logo\" />\n                        <span class=\"subtitle pushhalf--left\">\nicanhazdadjoke\n</span>\n                    </a>\n                </div>\n                <span id=\"nav-toggle\" class=\"nav-toggle\">\n                    <span></span>\n                    <span></span>\n                    <span></span>\n                </span>\n                <div id=\"nav-menu\" class=\"nav-right nav-menu\">\n                    <a class=\"nav-item is-tab\" href=\"/\">\n                        <span class=\"icon is-small\">\n                            <i class=\"fa fa-random\"></i>\n                        </span>\n                        <span class=\"pushquarter--left\">\nRandom joke\n</span>\n                    </a>\n                    <a class=\"nav-item is-tab\" href=\"/search\">\n                        <span class=\"icon is-small\">\n                            <i class=\"fa fa-search\"></i>\n                        </span>\n                        <span class=\"pushquarter--left\">\nSearch jokes\n</span>\n                    </a>\n                    <a class=\"nav-item is-tab\" href=\"/submit\">\n                        <span class=\"icon is-small\">\n                            <i class=\"fa fa-pencil-square-o\"></i>\n                        </span>\n                        <span class=\"pushquarter--left\">\nSubmit new joke\n</span>\n                    </a>\n                    <div class=\"nav-item\">\n                        <a href=\"/slack-add\" style=\"height:40px; max-width:139px\">\n                            <img alt=\"Add to Slack\" height=\"40\" width=\"139\" src=\"https://platform.slack-edge.com/img/add_to_slack.png\" style=\"width:139px; height:40px; max-height: 40px\" srcset=\"https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x\" />\n                        </a>\n                    </div>\n                    <div class=\"nav-item\">\n                        <a class=\"button\" target=\"_blank\" href=\"https://www.amazon.com/Brett-Langdon-icanhazdadjoke/dp/B01N6CQ3NZ/\" style=\"background-color: #ffffff; color: #5ebfe4; border-radius: 6px; font-weight: 500; height:40px; width:139px; max-width:139px\">\n                            <img src=\"/static/alexa-logo.png\" style=\"margin-left: -0.5em;\">\nAdd to \n                            <strong style=\"margin-left: 0.25em\">Alexa</strong>\n                        </a>\n                    </div>\n                </div>\n            </div>\n        </nav>\n        <section class=\"section\">\n            <div class=\"container\">\n                <div class=\"level\">\n                    <div class=\"level-left\">\n                        <div class=\"content level-item\">\n                            <h1>Random dad joke:</h1>\n                        </div>\n                    </div>\n                    <div class=\"level-right\">\n                        <a class=\"button is-primary level-item\" href=\"/\">\n                            <span class=\"icon is-small\">\n                                <i class=\"fa fa-random\"></i>\n                            </span>\n                            <span>\nNew joke\n</span>\n                        </a>\n                    </div>\n                </div>\n                <div class=\"content\">\n                    <div class=\"card\">\n                        <div class=\"card-content\">\n                            <p class=\"subtitle\">I finally bought the limited edition Thesaurus that I've always wanted. When I opened it, all the pages were blank.\r\n                                </br>I have no words to describe how angry I am.\n                            </p>\n                        </div>\n                        <footer class=\"card-footer\">\n                            <a class=\"card-footer-item\" href=\"/j/aMmbaFYTKBd\">\n                                <span class=\"icon is-small\">\n                                    <i class=\"fa fa-chain\"></i>\n                                </span>\n                                <span class=\"pushquarter--left\">\nPermalink\n</span>\n                            </a>\n                            <a class=\"card-footer-item\" target=\"_blank\" href=\"https://twitter.com/intent/tweet?url=https://icanhazdadjoke.com%2Fj%2FaMmbaFYTKBd%2Famp&text=Check+out+this+%23dadjoke&via=icanhazdadjoke\">\n                                <span class=\"icon is-small\">\n                                    <i class=\"fa fa-twitter\"></i>\n                                </span>\n                                <span class=\"pushquarter--left\">\nShare on Twitter\n</span>\n                            </a>\n                        </footer>\n                    </div>\n                </div>\n                <div class=\"content pushwhole--top\">\n                    <ins class=\"adsbygoogle\" style=\"display:block\" data-ad-client=\"ca-pub-3200991035275362\" data-ad-slot=\"5324903139\" data-ad-format=\"auto\"></ins>\n                </div>\n                <script>\n          (adsbygoogle = window.adsbygoogle || []).push({});\n        </script>\n            </div>\n        </section>\n        <footer class=\"footer\">\n            <div class=\"container\">\n                <div class=\"columns\">\n                    <div class=\"column is-5\">\n                        <div class=\"content\">\n                            <p>\n                                <strong>icanhazdadjoke.com</strong> by\n                                <a href=\"https://c653labs.com/\">C653 Labs</a>.\n                            </p>\n                            <p>\n                                <i>icanhazdadjoke.com</i> is the largest selection of dad jokes on the internet.\nNow supporting many different integrations to ensure you can access the dad jokes that you need wherever you are.\n                            </p>\n                        </div>\n                    </div>\n                    <div class=\"column is-3\"></div>\n                    <div class=\"column is-2\">\n                        <aside class=\"menu\">\n                            <ul class=\"menu-list\">\n                                <li>\n                                    <a href=\"/cdn-cgi/l/email-protection#6d1e181d1d021f192d040e0c03050c17090c0907020608430e0200\" target=\"_blank\">Contact</a>\n                                </li>\n                                <li>\n                                    <a href=\"https://twitter.com/icanhazdadjoke\" target=\"_blank\">Twitter</a>\n                                </li>\n                                <li>\n                                    <a href=\"https://slack.com/apps/A214NCJF2-icanhazdadjoke\" target=\"_blank\">Slack app</a>\n                                </li>\n                                <li>\n                                    <a href=\"https://www.amazon.com/Brett-Langdon-icanhazdadjoke/dp/B01N6CQ3NZ/\" target=\"_blank\">Alexa skill</a>\n                                </li>\n                                <li>\n                                    <a href=\"https://discordapp.com/api/oauth2/authorize?client_id=467365247921946626&permissions=0&scope=bot\" target=\"_blank\">Discord bot</a>\n                                </li>\n                                <li>\n                                    <a href=\"https://marketplace.atlassian.com/plugins/com.icanhazdadjoke/cloud/overview\" target=\"_blank\">HipChat plugin</a>\n                                </li>\n                                <li>\n                                    <a href=\"https://twistapp.com/integrations/install/20_901fa9d3df5b8784d3ddc56e\" target=\"_blank\">Twist integration</a>\n                                </li>\n                            </ul>\n                        </aside>\n                    </div>\n                    <div class=\"column is-2\">\n                        <aside class=\"menu\">\n                            <ul class=\"menu-list\">\n                                <li>\n                                    <a href=\"/about\">About</a>\n                                </li>\n                                <li>\n                                    <a href=\"/api\">API</a>\n                                </li>\n                                <li>\n                                    <a href=\"/\">Random joke</a>\n                                </li>\n                                <li>\n                                    <a href=\"/search\">Search jokes</a>\n                                </li>\n                                <li>\n                                    <a href=\"/submit\">Submit new joke</a>\n                                </li>\n                            </ul>\n                        </aside>\n                    </div>\n                </div>\n            </div>\n        </footer>\n        <script data-cfasync=\"false\" src=\"/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js\"></script>\n        <script>\n        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');\n\n        ga('create', 'UA-82372853-1', 'auto');\n        ga('send', 'pageview');\n        </script>\n        <script>\n      document.addEventListener('click', function (evt) {\n        if (evt.target.id === 'nav-toggle' || evt.target.parent.id === 'nav-toggle') {\n          document.getElementById('nav-menu').classList.toggle('is-active');\n        }\n      });\n    </script>\n        <script type=\"text/javascript\">\n      /* \n            <![CDATA[ */\n      var google_conversion_id = 855658655;\n      var google_conversion_language = \"en\";\n      var google_conversion_format = \"3\";\n      var google_conversion_color = \"ffffff\";\n      var google_conversion_label = \"gdOKCMjzmHAQn6GBmAM\";\n      var google_remarketing_only = false;\n      /* ]]> */\n    \n        </script>\n        <script type=\"text/javascript\" src=\"//www.googleadservices.com/pagead/conversion.js\"></script>\n        <noscript>\n            <div style=\"display:inline;\">\n                <img height=\"1\" width=\"1\" style=\"border-style:none;\" alt=\"\" src=\"//www.googleadservices.com/pagead/conversion/855658655/?label=gdOKCMjzmHAQn6GBmAM&amp;guid=ON&amp;script=0\"/>\n            </div>\n        </noscript>\n    </body>\n</html>"
+						}
+					]
+				},
+				{
+					"name": "mock dad jokes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://8e6e700b-5a53-4c3c-8468-452a49a6625c.mock.pstmn.io",
+							"protocol": "https",
+							"host": [
+								"8e6e700b-5a53-4c3c-8468-452a49a6625c",
+								"mock",
+								"pstmn",
+								"io"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "The term \"serverless\" doesn't mean you don't need servers, but rather you don't need to provision and manage those servers on your own. Similarly, mock services are easy-to-set-up APIs hosted on Postman servers that allow you to simulate real-world services in a controlled setting without the overhead of setting up your own services. \n\n1. **Add a request**: Add the following request `dad jokes` to the `Mock servers` folder.\n  - `GET` method\n  - `https://icanhazdadjoke.com/` request URL\n  - `Accept` header with `application/json` value\n\n  **Send** the request and make sure you receive a successful response.\n1. **Save an example**: [Save the previous response](https://learning.postman.com/docs/sending-requests/examples/#response-from-the-server) as our first example in the response pane: `Save Response` > `Save as example`. When you create the example, you will see a new example (`e.g.`) display beneath the request in the left sidebar. When you send a request to a mock server, Postman matches the request to a saved example in your collection. Postman then responds with the data you added to the example. \n1. **Add a mock**:  Select the more actions icon next to the collection where the request was saved and select **Mock collection**. Name your mock `mockForTesting` and leave the other settings at their defaults. Once you create the mock, copy the mock URL generated by Postman.\n1. **Call the mock**: Return to the folder `Mock services`, and add a second request named `mock dad jokes` with the following details:\n  - `GET` method\n  - Paste the mock URL from the previous step into the request URL field.\n\n  **Send** the call to see the example you saved in the previous step.\n1. **Generate code snippet**: You can use your mock server in your local development too. Once you have an API call working the way you like, select the code icon in the right pane to [generate a code snippet](https://learning.postman.com/docs/sending-requests/generate-code-snippets/) in your preferred language or framework to copy and paste into your own applications and integrations. \n\nNotice when you send the `dad jokes` request, the Dad Jokes server returns a different joke every time. When you send the `mock dad jokes` request, the Postman mock server only sends the same response you saved earlier.\n\nYou can edit the example (`e.g.`) to update the mock response, or [add more examples](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/mocking-with-examples/#step-6-add-another-example).\n\nThis was a simple example of saving a single static response. This functionality is especially helpful for:\n- Designing and prototyping a new service quickly \n- Isolating a system under test during debugging and testing by stubbing out external dependencies\n- Simulating edge cases that may be difficult or costly to incur in production\n- [Taking snapshots](https://www.postman.com/postman/workspace/test-examples-in-postman/collection/1559645-f8f51fd3-13eb-4049-8603-9e8f7b787fbe?ctx=documentation) to enable regression testing\n- [Consumer-driven contract testing](https://medium.com/better-practices/consumer-driven-contract-testing-using-postman-f3580dba5370)\n\nOnce you complete these steps, move on to the next folder in this collection to submit your solution. Follow the instructions in the request documentation."
+		},
+		{
+			"name": "Submit your solution",
+			"item": [
+				{
+					"name": "submit collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// counter for passed tests",
+									"let pass = 0",
+									"let totalToPass = 4",
+									"",
+									"let collection = pm.response.json().collection",
+									"",
+									"pm.test(\"If you have any failures, review the failed test results or ask for support in the community forum. Remember to save your changes if you update the collection. When all of your tests pass, you are done with today's challenge.\", () => {",
+									"    pm.expect(true);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Correct collection returned\", () => {",
+									"    pm.expect(collection.info.name).equals(\"Day 13: Mock servers\")",
+									"    pass += 1",
+									"})",
+									"",
+									"let folder = collection.item.find(fol => {return fol.name === \"Mock servers\"})",
+									"",
+									"pm.test(\"Requests added correctly\", () => {",
+									"    pm.expect(folder.item.length, 'check number of requests').equals(2)",
+									"",
+									"    let dadRequest = folder.item.find(req => { return req.name === \"dad jokes\"})",
+									"    pm.expect(dadRequest.name, 'check name').equals(\"dad jokes\")",
+									"    pm.expect(dadRequest.request.method, 'check method').equals(\"GET\")",
+									"    pm.expect(dadRequest.request.url.raw, 'check url').equals(\"https://icanhazdadjoke.com/\")",
+									"",
+									"",
+									"    let mockRequest = folder.item.find(req => { return req.name === \"mock dad jokes\"})",
+									"    pm.expect(mockRequest.name, 'check name').equals(\"mock dad jokes\")",
+									"    pm.expect(mockRequest.request.method, 'check method').equals(\"GET\")",
+									"    pm.expect(mockRequest.request.url.raw, 'check url').contains(\"mock.pstmn.io\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"// visualization for test results",
+									"let template",
+									"if (pass == totalToPass) {",
+									"    template = `🍪 passing!",
+									"        <br />",
+									"        <img src=\"https://media0.giphy.com/media/10Q4wOpmaMVIT6/giphy.gif?cid=ecf05e471hpabmrgyvc71cqbd32m6ulga3y9grezq31vfxxe&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"} else {",
+									"    template = `🙅 please try again",
+									"        <br />",
+									"        <img src=\"https://media0.giphy.com/media/HSrg4COTZYVY9PAp68/giphy.gif?cid=ecf05e47bi21t4frehikepzll2v48zipariwhm44s8pxh1av&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"}",
+									"pm.visualizer.set(template)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{postman_api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.getpostman.com/collections/16143001-6a646686-c1ed-4351-98da-1a48f2f334b7",
+							"protocol": "https",
+							"host": [
+								"api",
+								"getpostman",
+								"com"
+							],
+							"path": [
+								"collections",
+								"16143001-6a646686-c1ed-4351-98da-1a48f2f334b7"
+							]
+						},
+						"description": "It's time to check your collection.\n\n1.  **Get the collection ID:** Select the collection in the sidebar. Then in the context bar to the right, select the `Info` icon and copy the collection `ID`.\n1.  **Update the request URL:** Update the `collection_uid` in the request URL with the collection `ID` from the previous step, using any method you prefer. ⚠ Remember to add sensitive values like an API key to the `CURRENT VALUE` (and not `INITIAL VALUE`) of your public workspace.\n1.  **Validate your solution**: Hit **Send** and look under the **Tests** tab of the server response at the bottom to review your test results.\n    \nIf you have any failures, review the failed test results or ask for support in the [community forum](https://community.postman.com/). When all of your tests pass, you are done with today's challenge."
+					},
+					"response": []
+				}
+			],
+			"description": "Follow the instructions in the request documentation."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

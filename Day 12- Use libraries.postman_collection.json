@@ -1,0 +1,186 @@
+{
+	"info": {
+		"_postman_id": "ba5c4c15-571f-4df6-8bb8-09fb18130c3f",
+		"name": "Day 12: Use libraries",
+		"description": "## Instructions for Day 12: Use libraries\n\n1.  **Get the challenge:** Fork the parent collection to your own public workspace.\n2.  **Read the documentation:** Select the first folder. Expand the context bar on the right to follow the instructions in the collection documentation.\n3.  **Submit your solution:** Select the second folder and follow the instructions in the documentation to validate your solution.\n    \n## Learning objectives\n- Use built-in libraries\n- Visualize response data using Handlebars.js\n- Define and reference external libraries\n- Reuse test scripts and requests\n- Send asynchronous HTTP requests from scripts\n\n## Concepts covered\n* [Visualizing responses](https://learning.postman.com/docs/sending-requests/visualizer/)\n* [Use external libraries](https://learning.postman.com/docs/writing-scripts/script-references/postman-sandbox-api-reference/#using-external-libraries)\n* [Send HTTP request from scripts](https://learning.postman.com/docs/sending-requests/grpc/postman-sandbox-api/#sending-http-request-from-scripts)\n\n## Additional resources\n- [Handlebars.js](https://handlebarsjs.com/) docs\n- [Add external libraries](https://www.postman.com/postman/workspace/postman-answers/collection/13455110-7a6c90f0-0062-4089-b206-27c803dc1c37?ctx=documentation) code samples\n- [Reuse test script](https://www.postman.com/postman/workspace/test-examples-in-postman/collection/1559645-e86aead2-0cb9-4144-b568-46d84251af9b?ctx=documentation) code samples",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16143001"
+	},
+	"item": [
+		{
+			"name": "Use libraries",
+			"item": [
+				{
+					"name": "get all movies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `\r",
+									"<h3 background=\"#00FFEF\">Postman Movie Library</h3>\r",
+									"{{#each films}}\r",
+									"🎬 <b>{{title}}</b> ({{year}}) - {{minutes}}mins. <i>Director: {{director}} </i>\r",
+									"{{#if stock}}[Stock: {{stock}}]{{else}}<font color='#ff69b4'>⚠️ Out of stock</font>{{/if}}\r",
+									"<br/>\r",
+									"{{/each}}\r",
+									"`;\r",
+									"// Set visualizer\r",
+									"pm.visualizer.set(template, {\r",
+									" films: pm.response.json()\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.unbreakableapi.com/api/movies/all",
+							"protocol": "https",
+							"host": [
+								"www",
+								"unbreakableapi",
+								"com"
+							],
+							"path": [
+								"api",
+								"movies",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "We have already used built-in libraries like Faker.js and Chai.js. Let's use more libraries and get artistic!\n\n1.  **Add a request**: Add a request called `get all movies` to the folder `Use libraries` with the following details:\n    *   `GET` method\n    *   `https://www.unbreakableapi.com/api/movies/all` request URL \n\n  **Send** the request, and inspect the response.\n1. **Visualize the data**: Under the **Tests** tab, use the [`pm.visualizer.set()` method](https://learning.postman.com/docs/sending-requests/visualizer/#visualizer-api) to initialize an HTML template string and pass in the response data. \n```javascript\nvar template = `\n<h3 background=\"#00FFEF\">Postman Movie Library</h3>\n {{#each films}}\n  🎬 <b>{{title}}</b> ({{year}}) - {{minutes}}mins. <i>Director: {{director}} </i>\n  {{#if stock}}[Stock: {{stock}}]{{else}}<font color=red>⚠️ Out of stock</font>{{/if}}\n  <br/>\n {{/each}}\n`;\n// Set visualizer\npm.visualizer.set(template, {\n    films: pm.response.json()\n});\n```\n\n  **Send** the request and inspect the response under the **Visualize** tab. The template is formatted using [Handlebars.js](https://handlebarsjs.com/) syntax. \n1. **Style the data**: Use [any method of styling](https://learning.postman.com/docs/sending-requests/visualizer/#adding-styling-and-interaction-to-visualizations) you prefer. Please also make the \"Out of stock\" text precisely this color: `#ff69b4`. You can add any other personal flair that you'd like. Make sure the request returns a successful response, and save your changes.\n\nIn addition to built-in libraries, you can [import external libraries in the visualization](https://learning.postman.com/docs/sending-requests/visualizer/#using-your-own-libraries) using a `<script>` tag. And you can also use other libraries throughout the [Postman sandbox](https://learning.postman.com/docs/sending-requests/grpc/postman-sandbox-api/#using-external-libraries) under the pre-request or test script sections.\n\n### Reuse requests and scripts across collections\nThere are several ways to use external libraries in Postman. In a similar manner, you can reuse requests across collections by making an extra API call to fetch that request or script. Review these examples of [Reusing a request](https://www.postman.com/postman/workspace/test-examples-in-postman/collection/1559645-e86aead2-0cb9-4144-b568-46d84251af9b) and scripts.\n\nThis method relies on the [`pm.sendRequest()`](https://learning.postman.com/docs/sending-requests/grpc/postman-sandbox-api/#sending-http-request-from-scripts) function to send an API request from a script. Check out the [gist](https://gist.github.com/prashantagarwal/f278b3ca78b3927cde06f68674b82cae).\n\nOnce you complete these steps, move on to the next folder in this collection to submit your solution. Follow the instructions in the request documentation."
+		},
+		{
+			"name": "Submit your solution",
+			"item": [
+				{
+					"name": "submit collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// counter for passed tests",
+									"let pass = 0",
+									"let totalToPass = 5",
+									"",
+									"let collection = pm.response.json().collection",
+									"",
+									"pm.test(\"If you have any failures, review the failed test results or ask for support in the community forum. Remember to save your changes if you update the collection. When all of your tests pass, you are done with today's challenge.\", () => {",
+									"    pm.expect(true);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Correct collection returned\", () => {",
+									"    pm.expect(collection.info.name).equals(\"Day 12: Use libraries\")",
+									"    pass += 1",
+									"})",
+									"",
+									"let folder = collection.item.find(fol => {return fol.name === \"Use libraries\"})",
+									"",
+									"pm.test(\"Requests added correctly\", () => {",
+									"    pm.expect(folder.item.length, 'check number of requests').equals(1)",
+									"",
+									"    let movieRequest = folder.item.find(req => { return req.name === \"get all movies\"})",
+									"    pm.expect(movieRequest.name, 'check name').equals(\"get all movies\")",
+									"    pm.expect(movieRequest.request.method, 'check method').equals(\"GET\")",
+									"    pm.expect(movieRequest.request.url.raw, 'check url').equals(\"https://www.unbreakableapi.com/api/movies/all\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"",
+									"pm.test(\"Visualizer added\", () => {",
+									"    let movieRequest = folder.item.find(req => { return req.name === \"get all movies\"})",
+									"    let event = movieRequest.event.find(e => {return e.listen === \"test\"})",
+									"",
+									"    let script = event.script.exec.toString()",
+									"    pm.expect(script, 'check parse').contains(\"pm.response.json\")",
+									"    pm.expect(script, 'check test').contains(\"#ff69b4\")",
+									"    pm.expect(script, 'check schema').contains(\"pm.visualizer.set\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"// visualization for test results",
+									"let template",
+									"if (pass == totalToPass) {",
+									"    template = `🍪 passing!",
+									"        <br />",
+									"        <img src=\"https://media2.giphy.com/media/4Zo41lhzKt6iZ8xff9/giphy.gif?cid=ecf05e47nd1ra6bkpjoaonuce6l676ejjxx9wsrcs39xjqw9&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"} else {",
+									"    template = `🙅 please try again",
+									"        <br />",
+									"        <img src=\"https://media3.giphy.com/media/b5Cj0cAsg3buE/giphy.gif?cid=ecf05e473tg89sl05k2ed0ucin8ggjr99sor2jjt3sfv3hty&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"}",
+									"pm.visualizer.set(template)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{postman_api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.getpostman.com/collections/16143001-ba5c4c15-571f-4df6-8bb8-09fb18130c3f",
+							"protocol": "https",
+							"host": [
+								"api",
+								"getpostman",
+								"com"
+							],
+							"path": [
+								"collections",
+								"16143001-ba5c4c15-571f-4df6-8bb8-09fb18130c3f"
+							]
+						},
+						"description": "It's time to check your collection.\n\n1.  **Get the collection ID:** Select the collection in the sidebar. Then in the context bar to the right, select the `Info` icon and copy the collection `ID`.\n1.  **Update the request URL:** Update the `collection_uid` in the request URL with the collection `ID` from the previous step, using any method you prefer. ⚠ Remember to add sensitive values like an API key to the `CURRENT VALUE` (and not `INITIAL VALUE`) of your public workspace.\n1.  **Validate your solution**: Hit **Send** and look under the **Tests** tab of the server response at the bottom to review your test results.\n    \nIf you have any failures, review the failed test results or ask for support in the [community forum](https://community.postman.com/). When all of your tests pass, you are done with today's challenge."
+					},
+					"response": []
+				}
+			],
+			"description": "Follow the instructions in the request documentation."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
