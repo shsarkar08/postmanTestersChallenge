@@ -1,0 +1,181 @@
+{
+	"info": {
+		"_postman_id": "6375c714-8ee2-42c3-ac7b-8a282f59aae5",
+		"name": "Day 14: More tests",
+		"description": "## Instructions for Day 14: More tests\n\n1.  **Get the challenge:** Fork the parent collection to your own public workspace.\n2.  **Read the documentation:** Select the first folder. Expand the context bar on the right to follow the instructions in the collection documentation.\n3.  **Submit your solution:** Select the second folder and follow the instructions in the documentation to validate your solution.\n    \n## Learning objectives\n- Conditionally skip tests and requests\n- Configure test retries and timeouts\n\n## Concepts covered\n* [Writing tests](https://learning.postman.com/docs/writing-scripts/test-scripts/)\n* Conditionally skip tests and requests\n* Test retries and timeouts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16143001"
+	},
+	"item": [
+		{
+			"name": "More tests",
+			"item": [
+				{
+					"name": "xkcd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200){\r",
+									"    pm.test(\"response is having title property\",()=>{\r",
+									"        const resp = pm.response.json()\r",
+									"        pm.expect(resp).to.have.property('title');\r",
+									"})\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://xkcd.com/:page/info.0.json",
+							"protocol": "https",
+							"host": [
+								"xkcd",
+								"com"
+							],
+							"path": [
+								":page",
+								"info.0.json"
+							],
+							"variable": [
+								{
+									"key": "page",
+									"value": "{{$randomAlphaNumeric}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "### Skip tests and requests\nYou may want to skip tests and requests based on certain conditions or specified responses from the server. For example, if a user is logged in, you can redirect Postman to run a different set of requests within a collection using the [`postman.setNextRequest`](https://learning.postman.com/docs/running-collections/building-workflows/) function that we covered in a previous challenge. \n- [Ignore requests in a collection run](https://www.postman.com/st-makuake-2022/workspace/api-testing/collection/11783815-4984e574-5840-4315-a864-9a88d26c7039?ctx=documentation) code sample\n\nWe already explored one way to write conditional tests in Day 11 using JavaScript (e.g. if statements, nested tests, early bail out conditions). You can also use [`pm.test.skip()`](https://learning.postman.com/docs/sending-requests/grpc/postman-sandbox-api/#pmtest), such as in [the following example](https://community.postman.com/t/bypass-or-skip-tests-for-a-request/2704/4).\n\n```javascript\nlet skipTest = pm.environment.get('skipTest');\n\n(skipTest ? pm.test.skip : pm.test)(\"Check status code\", () => {\n    pm.expect(pm.response.code).to.equal(200);\n});\n\n(skipTest ? pm.test.skip : pm.test)(\"Check status code is not 404\", () => {\n    pm.expect(pm.response.code).to.not.equal(404);\n});\n```\n- [Ignore specific tests](https://www.postman.com/st-makuake-2022/workspace/api-testing/collection/11783815-bce7bb65-8868-4d83-8270-df4565cbcd6f?ctx=documentation) code sample\n\n1. **Add a request**: Add a request `xkcd` with the following details.\n  - `GET` method\n  - `https://xkcd.com/16/info.0.json` request URL\n  Update the `16` in the request URL using a path parameter (`:page`). Notice you can add a value to the path parameter under **Params**. Let's [generate a dynamic variable](https://learning.postman.com/docs/writing-scripts/script-references/variables-list/), specifically a random alpha-numeric character, so that every time we send the request, we generate a value like `6` or `\"z\"` in the request URL, so that the API will only return a successful response some of the time.\n1. **Write a conditional test**: Add a test that only runs if a successful response is returned, using any method you prefer.\n1. **Send the request**: Send the request several times to ensure the test runs only when a successful response is returned, and the test does not run when an unsuccessful response is returned. \n\n### Retry requests\n\nIn your own environment, occasionally requests will timeout. During scheduled collection runs and monitors, you can [configure retries on failure](https://learning.postman.com/docs/running-collections/scheduling-collection-runs-monitors/). To do this in your own CI/C pipeline or local environment, you may want to create a custom function like the following examples.\n- [Retry a failing request](https://community.postman.com/t/retry-a-failing-request/5934) community forum\n- [Retry on failure](https://stackoverflow.com/a/43497507/6815074) stackoverflow\n\n\nOnce you complete these steps, move on to the next folder in this collection to submit your solution. Follow the instructions in the request documentation."
+		},
+		{
+			"name": "Submit your solution",
+			"item": [
+				{
+					"name": "submit collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// counter for passed tests",
+									"let pass = 0",
+									"let totalToPass = 5",
+									"",
+									"let collection = pm.response.json().collection",
+									"",
+									"pm.test(\"If you have any failures, review the failed test results or ask for support in the community forum. Remember to save your changes if you update the collection. When all of your tests pass, you are done with today's challenge.\", () => {",
+									"    pm.expect(true);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pass += 1",
+									"});",
+									"",
+									"pm.test(\"Correct collection returned\", () => {",
+									"    pm.expect(collection.info.name).equals(\"Day 14: More tests\")",
+									"    pass += 1",
+									"})",
+									"",
+									"let folder = collection.item.find(fol => {return fol.name === \"More tests\"})",
+									"",
+									"pm.test(\"Requests added correctly\", () => {",
+									"    pm.expect(folder.item.length, 'check number of requests').equals(1)",
+									"",
+									"    let xkcdRequest = folder.item.find(req => { return req.name === \"xkcd\"})",
+									"    pm.expect(xkcdRequest.name, 'check name').equals(\"xkcd\")",
+									"    pm.expect(xkcdRequest.request.method, 'check method').equals(\"GET\")",
+									"    pm.expect(xkcdRequest.request.url.raw, 'check url with path variable').equals(\"https://xkcd.com/:page/info.0.json\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"pm.test(\"Test added\", () => {",
+									"    let xkcdRequest = folder.item.find(req => { return req.name === \"xkcd\"})",
+									"    let event = xkcdRequest.event.find(e => {return e.listen === \"test\"})",
+									"",
+									"    pm.expect(event.script.exec.toString(), 'check test').contains(\"pm.test\")",
+									"    pm.expect(event.script.exec.toString(), 'check success').contains(\"200\")",
+									"",
+									"    pass += 1",
+									"})",
+									"",
+									"// visualization for test results",
+									"let template",
+									"if (pass == totalToPass) {",
+									"    template = `🍪 passing!",
+									"        <br />",
+									"        <img src=\"https://media3.giphy.com/media/timWG1lyyfcYw/giphy.gif?cid=ecf05e4763v5abx0q41cdtzh0m3s0g6m3c9fu7d6cw3ravem&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"} else {",
+									"    template = `🙅 please try again",
+									"        <br />",
+									"        <img src=\"https://media1.giphy.com/media/hXO0qBbhWOE24ON3P3/giphy.gif?cid=ecf05e473tg89sl05k2ed0ucin8ggjr99sor2jjt3sfv3hty&rid=giphy.gif&ct=g\" />",
+									"    `",
+									"}",
+									"pm.visualizer.set(template)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{postman_api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.getpostman.com/collections/16143001-6375c714-8ee2-42c3-ac7b-8a282f59aae5",
+							"protocol": "https",
+							"host": [
+								"api",
+								"getpostman",
+								"com"
+							],
+							"path": [
+								"collections",
+								"16143001-6375c714-8ee2-42c3-ac7b-8a282f59aae5"
+							]
+						},
+						"description": "It's time to check your collection.\n\n1.  **Get the collection ID:** Select the collection in the sidebar. Then in the context bar to the right, select the `Info` icon and copy the collection `ID`.\n1.  **Update the request URL:** Update the `collection_uid` in the request URL with the collection `ID` from the previous step, using any method you prefer. ⚠ Remember to add sensitive values like an API key to the `CURRENT VALUE` (and not `INITIAL VALUE`) of your public workspace.\n1.  **Validate your solution**: Hit **Send** and look under the **Tests** tab of the server response at the bottom to review your test results.\n    \nIf you have any failures, review the failed test results or ask for support in the [community forum](https://community.postman.com/). When all of your tests pass, you are done with today's challenge."
+					},
+					"response": []
+				}
+			],
+			"description": "Follow the instructions in the request documentation."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
